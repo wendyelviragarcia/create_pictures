@@ -1,5 +1,5 @@
  
-# create_pictures-with-tiers.praat (v.4.4 -April 2017-)
+# create_pictures (v.4.4 -April 2017-)
 Laboratori de Fonètica (Universitat de Barcelona)
  
 						DESCRIPTION
