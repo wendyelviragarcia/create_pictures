@@ -1,9 +1,10 @@
  
 # create_pictures-with-tiers.praat (v.4.4 -April 2017-)
-# Laboratori de Fonètica (Universitat de Barcelona)
+Laboratori de Fonètica (Universitat de Barcelona)
  
 						DESCRIPTION
 	This script creates and saves pictures (PNG, PDF, wmf, eps, PraatPic) of all the Sound and TextGrid files it finds in a folder.
+	
   The pictures contain a waveform (optional), a spectrogram(optional), the F0 track (optional) and a the content of the tiers of the TextGrid associated with the sound file (optional). 
  
 	The script is designed to carry out some operations automatically:
