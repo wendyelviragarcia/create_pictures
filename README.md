@@ -1,7 +1,10 @@
  
-# create_pictures (v.4.4 -April 2017-)
-Laboratori de Fonètica (Universitat de Barcelona)
- 
+# Create Pictures
+This folder contains a set of scripts for creating a spectrogram figure (with or without annotation) of a sound file in Praat. Choose the script that serves your purpose better and download that .praat file.
+- Pictures for all files in a folder
+- Picture for a selected sound (without annotation)
+- Picture for a selected sound and TextGrid (with annotation)
+
 # DESCRIPTION
  This script creates and saves pictures (PNG, PDF, wmf, eps, PraatPic) of all the Sound and TextGrid files it finds in a folder.
 	
@@ -19,47 +22,10 @@ In the INSTRUCTIONS section you will find details about the other characteristic
  	 
 
 # INSTRUCTIONS
-0. Before you start:
- - Check that your .wav filename does not contain white spaces. 
- - If  you want to draw TextGrids, create the TextGrids with the same name of the sound they are made for. Save them in a folder. 
-1. Open the script (Open/Read from file...), click Run in the upper menu and Run again. 
-2. Set the parameters.
-
-- The 3 first fields are for the folders where you have your files. In the first field, write the name of the folder where you have your sound files.  
-In the second field, write the name of the folder where you have your Textgrids. In the third field, write the name of the folder where you want the pictures to be saved. Important: always write the path without bar at the end "/".  
-- By changing the dynamic range you can make your spectrograms look 'cleaner'. The lowest it is, the lighter the spectrogram looks.  
-- Choose whether you want to draw the F0 curve or not. The F0 curve will be written twice, once in white and once in thinner black (Welby 2003).  
-- Then specify if you want the F0 range to be defined automatically or manually. If you choose to set it manually, 
-in the next window you'll be asked to define the F0 minimum and F0 maximum.  
-- Choose if you want the F0 minimum and F0 maximum marks to appear on the y axis (if you place them, they might overlap with other marks).  
-Note that the F0 minimum and F0 maximum marks are placed at 'rounded' values, that means that 377.8 Hz is rounded to 380 Hz and 51.2 Hz is rounded to 50 Hz.  
-- Decide how much you want the F0 curve to be smoothed. In this field, you need to enter the bandwidth (in Hertz). If you want a very smoothed curve, you should choose a smaller bandwidth (e.g. 10), whereas if you want a less smoothed curve you should choose a bigger bandwidth (e.g. 50).Don't write 0 in here, because your curve would become plain.
-- In the next two choice menus, you can choose the label of the axes (in different languages). You can also decide not to label either or both of them.  
-- You can change the picture width.  
-- Mark the formats in which you want to save the pictures. Notice that PDF will only run if you are working on a Mac and wmf is only for Windows. PNG for Windows and presumably Linux.
-- Mark whether you want more options or not. (See below for details)
-
-#### Click OK
-
-## MORE OPTIONS WINDOW
-If you chose the more options button or if you chose to set the speaker's range manually, a new window will appear. In this window you can:
-- Set the F0 range in the picture. You must write the numbers separated by a hyphen. This field will only appear if you chose "Set the range manually" in the previous form.
-- Choose the spectrogram range. This is by default from 0 to 5000Hz.
-- If you have chosen not to draw the F0 curve, you can select here how many marks of frequency you want in the spectrogram. 
-You'll be asked every how many Hz you want a mark.
-- Change the time marks of the x axis. By default, there is a mark without number at every 0.2 seconds and a mark with number at every 0.5 (the number appears written above the mark.)
-- If you are drawing the f0 curve and you've chosen "Show more options", you can choose here how do you want Praat to select the better candidates to be F0. 
-
-The script runs with the autocorrelation method (Boersma, 1993) which is optimized for human intonation research, so if you are working with speech, you don't need to change anything.
-Here you'll be asked for the octave cost, octave jump cost, the voiced/unvoiced cost and the voicing_threshold.
+The specific instructions for each script are detailed at the beggining of the .praat file. Remember a Praat file is only a .txt file that you can open with your **plain** text editor (such as Notepad++, Sublimetext, Atom...)
 
 
-### Click OK (the Revert button goes back to the Standards of the form)
-3. Now search your pictures, they have to be in the folder you specified in the first window (the form).
-
-
-
-#						CREDITS
+# CREDITS
 Feedback is always welcome, please if you notice any bugs or come up with anything that can improve this script, let me know!
 Wendy Elvira-García
 www.wendyelvira.ga
@@ -67,13 +33,13 @@ october 2013
 tested on Praat 5.3.73 for Windows and Mac  
 If it doesn't run on Linux, check the syntax of lines: 470 & 486 and mail me I'll be grateful.  
 
-Citation: Elvira García, Wendy (2017). Create pictures with tiers v.4.4. Praat script. (Retrieved from http://stel.ub.edu/labfon/en/praat-scripts)  
+**Citation: Elvira García, Wendy (2017). Create pictures with tiers v.4.4. Praat script. (Retrieved from http://stel.ub.edu/labfon/en/praat-scripts)  **
 
 The first version of this script was inspired by:
 draw-waveform-sgram-f0.praat  
 Pauline Welby (2003) with the modifications made by Paolo Roseano (2011)  
 
-# 						LICENSE
+# LICENSE
 Copyright (C) 2017  Wendy Elvira  
 
 This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
