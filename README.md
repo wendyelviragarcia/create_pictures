@@ -5,7 +5,7 @@ This folder contains a set of scripts for creating a spectrogram figure (with or
 - Picture for a selected sound (without annotation)
 - Picture for a selected sound and TextGrid (with annotation)
 
-#Output
+# Output
 ![image](output.png)
 
 
