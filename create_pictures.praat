@@ -106,6 +106,7 @@
 
 spectrogram_maximum_frequency = 5000
 let_me_modify_my_pitch = 0
+frequency_marks_every= 1000
 
 #variables para el tiempo cada (ms)
     time_mark_with_number = 0.5
@@ -321,6 +322,14 @@ for ifile to numberOfFiles
 		Line width... 6
 		Yellow
 		Draw: 0, 0, 0, 0, "no"
+
+				Line width... 1
+
+		if draw_F0_curve=0
+
+			Marks right every: 1, 10, "yes", "yes", "no"
+			Text right: "yes", "Int. (dB)"
+		endif
 	endif
 
 
@@ -400,11 +409,11 @@ for ifile to numberOfFiles
 			f0min_redondeado = number (f0min_redondeado$)
 			f0min_redondeado = f0min_redondeado * 10
 			f0max_redondeado = f0max_redondeado * 10
-			One mark left... f0min_redondeado yes no no
-			One mark left... f0max_redondeado yes no no
+			One mark right... f0min_redondeado yes no no
+			One mark right... f0max_redondeado yes no no
 
-			#One mark left... 'f0max' yes no no
-			#One mark left... 'f0min' yes no no
+			#One mark right... 'f0max' yes no no
+			#One mark right... 'f0min' yes no no
 		endif
 		
 		
@@ -443,13 +452,16 @@ for ifile to numberOfFiles
 			marca = marca + intervalo_entre_marcas
 			marca$ = "'marca'"
 			if marca <= f0max
-				do ("One mark left...", 'marca', "yes", "yes", "no", "'marca$'")
+				do ("One mark right...", 'marca', "yes", "yes", "no", "'marca$'")
 			endif
 		endfor
 
 		
 		#draws black box
 		Draw inner box
+
+		Line width... 1
+		Cyan
 		
 		#Determines  title of x axis
 		if label_of_the_frequency_axis <> 1
@@ -474,75 +486,64 @@ for ifile to numberOfFiles
 				label_of_the_frequency_axis$ = "(Hz)"
 			endif
 			#writes titles y axis
-			Text left... yes 'label_of_the_frequency_axis$'
+			Text right... yes 'label_of_the_frequency_axis$'
 		endif
 	endif
 
 
 	if draw_formants = 1
-		 maxfreq= 5500
-
-		if draw_F0_curve = 0
-			if f0min < 150 
-			 maxfreq= 5000
-			endif
-		endif
-
+		
 
 		select Sound 'base$'
-		# Crea la ventana de imagen para la intensidad
 		Viewport... 0 'picture_width' 1 4
 		# creates formant objects
-				
-
-
-		To Formant (burg): 0, 5, maxfreq, 0.025, 50
+		To Formant (burg): 0, 5, spectrogram_maximum_frequency, 0.025, 50
 
 		Line width... 10
 		White
-		Speckle: 0, 0, maxfreq, 30, "no"
+		Speckle: 0, 0, spectrogram_maximum_frequency, 30, "no"
 
 		Line width... 6
 		Red
-		Speckle: 0, 0, maxfreq, 30, "no"
+		Speckle: 0, 0, spectrogram_maximum_frequency, 30, "no"
 		
 		Line width... 1
 		Black
+		
+		
 
 	endif
 
 
-	#si no se va a poner el F0 que salgan las marcas de valor frecuencial del espectrograma
-	if draw_F0_curve = 0
-		do ("Marks left every...", 1, frequency_marks_every, "yes", "yes", "no")
-
-
-	
-		if label_of_the_frequency_axis <> 1	
-			if label_of_the_frequency_axis = 2
-				label_of_the_frequency_axis$ = "Hz"
-			elsif label_of_the_frequency_axis = 3
-				label_of_the_frequency_axis$ = "Frequency (Hz)"
-			elsif label_of_the_frequency_axis = 4
-				label_of_the_frequency_axis$ = "Frecuencia (Hz)"
-			elsif label_of_the_frequency_axis = 5
-				label_of_the_frequency_axis$ = "Freqüència (Hz)"
-			elsif label_of_the_frequency_axis = 6
-				label_of_the_frequency_axis$ = "Frequência (Hz)"
-			elsif label_of_the_frequency_axis = 7
-				label_of_the_frequency_axis$ = "Frequenz (Hz)"
-			elsif label_of_the_frequency_axis = 8
-				label_of_the_frequency_axis$ = "Maiztasuna (Hz)"
-			elsif label_of_the_frequency_axis = 9
-				label_of_the_frequency_axis$ = "Fréquence (Hz)"
-			elsif label_of_the_frequency_axis = 10
-				label_of_the_frequency_axis$ = "(Hz)"
+	#if draw_F0_curve = 0
+	if draw_spectrogram = 1
+			do ("Marks left every...", 1, frequency_marks_every, "yes", "yes", "no")
+		
+			if label_of_the_frequency_axis <> 1	
+				if label_of_the_frequency_axis = 2
+					label_of_the_frequency_axis$ = "Hz"
+				elsif label_of_the_frequency_axis = 3
+					label_of_the_frequency_axis$ = "Frequency (Hz)"
+				elsif label_of_the_frequency_axis = 4
+					label_of_the_frequency_axis$ = "Frecuencia (Hz)"
+				elsif label_of_the_frequency_axis = 5
+					label_of_the_frequency_axis$ = "Freqüència (Hz)"
+				elsif label_of_the_frequency_axis = 6
+					label_of_the_frequency_axis$ = "Frequência (Hz)"
+				elsif label_of_the_frequency_axis = 7
+					label_of_the_frequency_axis$ = "Frequenz (Hz)"
+				elsif label_of_the_frequency_axis = 8
+					label_of_the_frequency_axis$ = "Maiztasuna (Hz)"
+				elsif label_of_the_frequency_axis = 9
+					label_of_the_frequency_axis$ = "Fréquence (Hz)"
+				elsif label_of_the_frequency_axis = 10
+					label_of_the_frequency_axis$ = "(Hz)"
+				endif
+			#escribe el texto del eje y, si no hay curva de f0
+			Text left... yes 'label_of_the_frequency_axis$'
 			endif
-		#escribe el texto del eje y, si no hay curva de f0
-		Text left... yes 'label_of_the_frequency_axis$'
 		endif
 	endif
-
 
 	if draw_waveform=1
 		# Label x axis
