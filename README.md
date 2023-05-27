@@ -14,7 +14,7 @@ This folder contains a set of scripts for creating a spectrogram figure (with or
 # DESCRIPTION
  This script creates and saves pictures (PNG, PDF, wmf, eps, PraatPic) of all the Sound and TextGrid files it finds in a folder.
 	
-The pictures contain a waveform (optional), a spectrogram(optional), the F0 track (optional) and a the content of the tiers of the TextGrid associated with the sound file (optional). 
+The pictures contain a waveform (optional), a spectrogram(optional), intensity track (optional), formant track (optional) and the F0 track (optional) and a the content of the tiers of the TextGrid associated with the sound file (optional). 
  
 The script is designed to carry out some operations automatically:
 	
@@ -36,10 +36,9 @@ Feedback is always welcome, please if you notice any bugs or come up with anythi
 Wendy Elvira-García
 www.wendyelvira.ga
 october 2013  
-tested on Praat 5.3.73 for Windows and Mac  
-If it doesn't run on Linux, check the syntax of lines: 470 & 486 and mail me I'll be grateful.  
+tested on Praat 6 for Windows and Mac  
 
-**Citation: Elvira García, Wendy (2017). Create pictures with tiers v.4.4. Praat script.**
+**Citation: Elvira García, Wendy (2022). Create pictures with tiers v.6. Praat script.**
 
 The first version of this script was inspired by:
 draw-waveform-sgram-f0.praat  
