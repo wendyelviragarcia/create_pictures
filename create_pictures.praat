@@ -1,12 +1,12 @@
 ############################################################################################################################################################################################
 # 
-# create_pictures-with-tiers.praat (v.5 -2020-)
+# create_pictures-with-tiers.praat (v.6 -2022-)
+# Wendy Elvira-García
 # Laboratori de Fonètica (Universitat de Barcelona)
-
 # 
 #						DESCRIPTION
 #	This script creates and saves pictures (PNG, PDF, wmf, eps, PraatPic) of all the Sound and optionally a matching TextGrid file it finds in a folder.
-#	The pictures contain a waveform (optional), a spectrogram (optional), the F0 track (optional) the intensity track (optional) and the content of the tiers of the TextGrid associated with the sound file (optional) and only if it finds one. 
+#	The pictures contain a waveform (optional), a spectrogram (optional), the F0 track (optional) the intensity track (optional), formant track and the content of the tiers of the TextGrid associated with the sound file (optional) and only if it finds one. 
 # 
 #	The script is designed to carry out some operations automatically:
 #	
@@ -79,14 +79,14 @@
 # wendyelviragarcia@gmail.com // www.wendyelvira.ga
 # first version: october 2013
 #
-# Citation: Elvira García, Wendy (2020). Create pictures with tiers v.5. Praat script. (Retrieved from https://github.com/wendyelviragarcia/create_pictures)
+# Citation: Elvira García, Wendy (2022). Create pictures with tiers v.6. Praat script. (Retrieved from https://github.com/wendyelviragarcia/create_pictures)
 #
 # The first version of this script was inspired by:
 # draw-waveform-sgram-f0.praat
 # Pauline Welby (2003) with the modifications made by Paolo Roseano (2011)
 
 # 						LICENSE
-# Copyright (C) 2018  Wendy Elvira
+# Copyright (C) 2022  Wendy Elvira
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -129,12 +129,13 @@ endif
 
 form Create_pictures
     comment Where are your files?
-    sentence Sounds_folder C:\Users\username\Desktop\
-    sentence TextGrids_folder C:\Users\username\Desktop\
-    sentence Pictures_folder C:\Users\username\Desktop\
+    sentence Sounds_folder /Users/weg/Desktop/TEST
+    sentence TextGrids_folder /Users/weg/Desktop/TEST
+    sentence Pictures_folder /Users/weg/Desktop/TEST
 	boolean Draw_waveform yes
 	boolean Draw_spectrogram 1
 	boolean Draw_intensity 1
+	boolean Draw_formants 1
 	boolean Draw_TextGrid 1
     positive Dynamic_range 45
     boolean Draw_F0_curve yes
@@ -311,7 +312,7 @@ for ifile to numberOfFiles
 		select Sound 'base$'
 		# Crea la ventana de imagen para la intensidad
 		Viewport... 0 'picture_width' 1 4
-		# Dibuja el espectrograma
+
 		To Intensity: 100, 0, "yes"
 		Line width... 10
 		White
@@ -320,8 +321,13 @@ for ifile to numberOfFiles
 		Line width... 6
 		Yellow
 		Draw: 0, 0, 0, 0, "no"
-		Black
 	endif
+
+
+
+
+
+
 
 	if draw_F0_curve = 1
 		if range = 1
@@ -371,9 +377,9 @@ for ifile to numberOfFiles
 		selectObject: myPitch
 		Draw... 0 0 'f0min' 'f0max' no
 
-		# Como una linea negra
+		# Como una linea azul
 		Line width... 6
-		Black
+		Cyan
 		Draw... 0 0 'f0min' 'f0max' no
 		
 	
@@ -470,6 +476,39 @@ for ifile to numberOfFiles
 			#writes titles y axis
 			Text left... yes 'label_of_the_frequency_axis$'
 		endif
+	endif
+
+
+	if draw_formants = 1
+		 maxfreq= 5500
+
+		if draw_F0_curve = 0
+			if f0min < 150 
+			 maxfreq= 5000
+			endif
+		endif
+
+
+		select Sound 'base$'
+		# Crea la ventana de imagen para la intensidad
+		Viewport... 0 'picture_width' 1 4
+		# creates formant objects
+				
+
+
+		To Formant (burg): 0, 5, maxfreq, 0.025, 50
+
+		Line width... 10
+		White
+		Speckle: 0, 0, maxfreq, 30, "no"
+
+		Line width... 6
+		Red
+		Speckle: 0, 0, maxfreq, 30, "no"
+		
+		Line width... 1
+		Black
+
 	endif
 
 
