@@ -7,6 +7,8 @@ This folder contains a set of scripts for creating a spectrogram figure (with or
 
 # Output
 ![image](output.png)
+![image](output2.png)
+
 
 
 # DESCRIPTION
