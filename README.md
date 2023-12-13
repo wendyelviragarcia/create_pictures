@@ -1,9 +1,9 @@
  
 # Create Pictures
-This folder contains a set of scripts for creating a spectrogram figure (with or without annotation) of a sound file in Praat. Choose the script that serves your purpose better and download that .praat file.
-- Pictures for all files in a folder
-- Picture for a selected sound, already open and selected at Praat (without annotation)
-- Picture for a selected sound and TextGrid, both need to be already open and selected at Praat (with annotation)
+This folder contains a three scripts for creating a spectrogram figure (with or without annotation) of a sound file in Praat. Choose the script that serves your purpose better and download that .praat file.
+- "create_pictures.praat": Creates pictures for all files in a folder
+- "create-pictures-selected-sound.praat": Creates a picture for a selected sound, already open and selected at Praat (without annotation)
+- " create-pictures-selected-sound-and-textgrid.praat": Creates a picture for a selected sound and TextGrid, both need to be already open and selected at Praat (with annotation)
 
 # Output
 ![image](output.png)
