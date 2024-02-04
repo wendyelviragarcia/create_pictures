@@ -1,18 +1,20 @@
  
 # Create Pictures
-This folder contains a set of scripts for creating a spectrogram figure (with or without annotation) of a sound file in Praat. Choose the script that serves your purpose better and download that .praat file.
-- Pictures for all files in a folder
-- Picture for a selected sound (without annotation)
-- Picture for a selected sound and TextGrid (with annotation)
+This folder contains a three scripts for creating a spectrogram figure (with or without annotation) of a sound file in Praat. Choose the script that serves your purpose better and download that .praat file.
+- "create_pictures.praat": Creates pictures for all files in a folder
+- "create-pictures-selected-sound.praat": Creates a picture for a selected sound, already open and selected at Praat (without annotation)
+- " create-pictures-selected-sound-and-textgrid.praat": Creates a picture for a selected sound and TextGrid, both need to be already open and selected at Praat (with annotation)
 
 # Output
 ![image](output.png)
+![image](output2.png)
+
 
 
 # DESCRIPTION
  This script creates and saves pictures (PNG, PDF, wmf, eps, PraatPic) of all the Sound and TextGrid files it finds in a folder.
 	
-The pictures contain a waveform (optional), a spectrogram(optional), the F0 track (optional) and a the content of the tiers of the TextGrid associated with the sound file (optional). 
+The pictures contain a waveform (optional), a spectrogram(optional), intensity track (optional), formant track (optional) and the F0 track (optional) and a the content of the tiers of the TextGrid associated with the sound file (optional). 
  
 The script is designed to carry out some operations automatically:
 	
@@ -34,10 +36,9 @@ Feedback is always welcome, please if you notice any bugs or come up with anythi
 Wendy Elvira-García
 www.wendyelvira.ga
 october 2013  
-tested on Praat 5.3.73 for Windows and Mac  
-If it doesn't run on Linux, check the syntax of lines: 470 & 486 and mail me I'll be grateful.  
+tested on Praat 6 for Windows and Mac  
 
-**Citation: Elvira García, Wendy (2017). Create pictures with tiers v.4.4. Praat script.**
+**Citation: Elvira García, Wendy (2022). Create pictures with tiers v.6. Praat script.**
 
 The first version of this script was inspired by:
 draw-waveform-sgram-f0.praat  

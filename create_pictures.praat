@@ -1,51 +1,51 @@
 ############################################################################################################################################################################################
 # 
-# create_pictures-with-tiers.praat (v.4.4 -April 2017-)
+# create_pictures-with-tiers.praat (v.6 -2022-)
+# Wendy Elvira-García
 # Laboratori de Fonètica (Universitat de Barcelona)
-
 # 
 #						DESCRIPTION
-#	This script creates and saves pictures (PNG, PDF, wmf, eps, PraatPic) of all the Sound and TextGrid files it finds in a folder.
-#	The pictures contain a waveform (optional), a spectrogram(optional), the F0 track (optional) and a the content of the tiers of the TextGrid associated with the sound file (optional). 
+#	This script creates and saves pictures (PNG, PDF, wmf, eps, PraatPic) of all the Sound and optionally a matching TextGrid file it finds in a folder.
+#	The pictures contain a waveform (optional), a spectrogram (optional), the F0 track (optional) the intensity track (optional), formant track and the content of the tiers of the TextGrid associated with the sound file (optional) and only if it finds one. 
 # 
 #	The script is designed to carry out some operations automatically:
 #	
 #	1) If you are drawing a TextGrid, it recognizes automatically the number of tiers in EACH textgrid and draws the picture consequently (i.e. in the picture there will be 
 #	no unnecessary white space between the tiers and the spectrogram).
-#	2) It converts the TextGrid to backslash trigraphs before drawing, so you won't have problems plotting symbols like % or ¡
+#	2) It converts the TextGrid to backslash trigraphs before drawing, so you won't have problems plotting symbols like % or phonetic symbols
 #	3) It detects automatically the F0 range of the picture of EACH sentence (unless you choose to specify it manually). 
 #	4)In order to correct those cases in which Praat detects F0 in fricatives (what Boersma calls "to hallucinate pitches")the script gets 
-#	the pitch from a filtered sound in which all frequencies beyond 1000Hz have been cancelled. 
-#	5) It establishes automatically the number of marks on the y axis and their placement. It places the first mark at the lowest multiple of 50 Hz within the range 
+#	the pitch from a filtered sound in which all frequencies beyond 1000Hz have been cancelled. In addition, it uses Hirst's code "pitch in two steps" to find the speaker range
+#	5) It establishes automatically the number of marks on the y-axis and their placement. It places the first mark at the lowest multiple of 50 Hz within the range 
 #	of the picture (e.g. at 50 Hz, or 100 Hz, or 150 Hz...). The following marks are placed every 50/100/150 Hz (depending on the range of the utterance).  
 #	
 #	In the INSTRUCTIONS section you will find details about the other characteristics and options of the script (e.g changing the dynamic range, 
-#	choosing the level of smooth in the F0 track, changing the axis' names, choosing the speakers range of F0...)
+#	choosing the level of smoothness in the F0 track, changing the axis' names, choosing the speaker's range of F0...)
 # 	 
 #	
 # 
 #						INSTRUCTIONS
 #	0. Before you start:
 #		- Check that your .wav filename does not contain white spaces. 
-#		- If  you want to draw TextGrids, create the TextGrids with the same name of the sound they are made for. Save them in a folder. 
+#		- If you want to draw TextGrids, create the TextGrids with the same name as the sound they are made for. Save them in a folder. 
 #
 #	1. Open the script (Open/Read from file...), click Run in the upper menu and Run again. 
 #	2. Set the parameters.
 #		a) The 3 first fields are for the folders where you have your files. In the first field, write the name of the folder where you have your sound files.
 #			In the second field, write the name of the folder where you have your Textgrids. In the third field, write the name of the folder where 
-#			you want the pictures to be saved. Important: always write the path without bar at the end "/".
+#			you want the pictures to be saved. Use / in mac and \ in windows
 #		b) By changing the dynamic range you can make your spectrograms look 'cleaner'. The lowest it is, the lighter the spectrogram looks.
-#		c) Choose whether you want to draw the F0 curve or not. The F0 curve will be written twice, once in white and once in thinner black (Welby 2003).
+#		c) Choose what do you want to draw, waveform, spectrogram, and intensity. And whether you want to draw the F0 curve or not. The F0 curve will be written twice, once in white and once in thinner black (Welby 2003).
 #		d) Then specify if you want the F0 range to be defined automatically or manually. If you choose to set it manually, 
 #		in the next window you'll be asked to define the F0 minimum and F0 maximum.
-#		e) Choose if you want the F0 minimum and F0 maximum marks to appear on the y axis (if you place them, they might overlap with other marks).
-#		Note that the F0 minimum and F0 maximum marks are placed at 'rounded' values, that means that 377.8 Hz is rounded to 380 Hz and 51.2 Hz is rounded to 50 Hz.
+#		e) Choose if you want the F0 minimum and F0 maximum marks to appear on the y-axis (if you place them, they might overlap with other marks).
+#		Note that the F0 minimum and F0 maximum marks are placed at 'rounded' values, which means that 377.8 Hz is rounded to 380 Hz and 51.2 Hz is rounded to 50 Hz.
 #		f) Decide how much you want the F0 curve to be smoothed. In this field, you need to enter the bandwidth (in Hertz). If you want a 
 #		very smoothed curve, you should choose a smaller bandwidth (e.g. 10), whereas if you want a less smoothed curve you should choose a bigger bandwidth (e.g. 50).
 #		Don't write 0 in here, because your curve would become plain.
 #		g)In the next two choice menus, you can choose the label of the axes (in different languages). You can also decide not to label either or both of them.
 #		h) You can change the picture width.
-#		i)Mark the formats in which you want to save the pictures. Notice that PDF will only run if you are working
+#		i) Mark the formats in which you want to save the pictures. Notice that PDF will only run if you are working
 #		 on a Mac and wmf is only for Windows. PNG for Windows and presumably Linux.
 #		j)Mark whether you want more options or not. (See below for details)
 #		Click OK
@@ -57,11 +57,11 @@
 #  		b) Choose the spectrogram range. This is by default from 0 to 5000Hz.
 #		c) If you have chosen not to draw the F0 curve, you can select here how many marks of frequency you want in the spectrogram. 
 #		You'll be asked every how many Hz you want a mark.
-#		d) Change the time marks of the x axis. By default, there is a mark without number at every 0.2 seconds and a mark with number at every 0.5 (the number appears 
+#		d) Change the time marks of the x-axis. By default, there is a mark without a number at every 0.2 seconds and a mark with a number at every 0.5 (the number appears 
 #		written above the mark.)
 #		e) If you are drawing the f0 curve and you've chosen "Show more options", you can choose here how do you want Praat to select the better candidates to be F0. 
 #			The script runs with the autocorrelation method (Boersma, 1993) which is optimized for human intonation research, so if you are working with speech, 
-#			you don't need to change anything.
+#			You don't need to change anything.
 #			Here you'll be asked for the octave cost, octave jump cost, the voiced/unvoiced cost and the voicing_threshold.
 #
 #
@@ -75,20 +75,18 @@
 #						CREDITS
 # Feedback is always welcome, please if you notice any bugs or come up with anything that can improve this script, let me know!
 # 	
-# Wendy Elvira-García
-# wendyelviragarcia@gmail.com
-# october 2013
-# tested on Praat 5.3.73 for Windows and Mac
-# If it doesn't run on Linux, check the syntax of lines: 470 & 486 and mail me I'll be grateful.
+# Wendy Elvira-García 
+# wendyelviragarcia@gmail.com // www.wendyelvira.ga
+# first version: october 2013
 #
-# Citation: Elvira García, Wendy (2017). Create pictures with tiers v.4.4. Praat script. (Retrieved from http://stel.ub.edu/labfon/en/praat-scripts)
+# Citation: Elvira García, Wendy (2022). Create pictures with tiers v.6. Praat script. (Retrieved from https://github.com/wendyelviragarcia/create_pictures)
 #
 # The first version of this script was inspired by:
 # draw-waveform-sgram-f0.praat
 # Pauline Welby (2003) with the modifications made by Paolo Roseano (2011)
 
 # 						LICENSE
-# Copyright (C) 2017  Wendy Elvira
+# Copyright (C) 2022  Wendy Elvira
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -104,10 +102,11 @@
 # http://www.gnu.org/licenses/gpl-3.0.en.html
 #
 ###################################################################################################################################
-# VARIBLES PREDEFINIDAS
+# FIXED VARIBLES 
 
 spectrogram_maximum_frequency = 5000
 let_me_modify_my_pitch = 0
+frequency_marks_every= 1000
 
 #variables para el tiempo cada (ms)
     time_mark_with_number = 0.5
@@ -127,15 +126,17 @@ if praatVersion < 5373 and macintosh = 1
 	exit Your Praat version ('praatVersion') is too old. Download the new one.
 endif
 
-############################		FORMULARIO		###################################################################
+############################		FORM		###################################################################
 
 form Create_pictures
     comment Where are your files?
-    sentence Sounds_folder C:\Users\username\Desktop
-    sentence TextGrids_folder C:\Users\username\Desktop
-    sentence Pictures_folder C:\Users\username\Desktop
+    sentence Sounds_folder /Users/weg/Desktop/TEST
+    sentence TextGrids_folder /Users/weg/Desktop/TEST
+    sentence Pictures_folder /Users/weg/Desktop/TEST
 	boolean Draw_waveform yes
 	boolean Draw_spectrogram 1
+	boolean Draw_intensity 1
+	boolean Draw_formants 1
 	boolean Draw_TextGrid 1
     positive Dynamic_range 45
     boolean Draw_F0_curve yes
@@ -187,7 +188,7 @@ endform
 
 
 
-#################		FORMULARIO OPCIONES		###############################
+#################		FORM OPTIONS		###############################
 
 if show_more_options = 1 or range = 2 or draw_F0_curve = 0
 	beginPause ("Options")
@@ -211,8 +212,8 @@ if show_more_options = 1 or range = 2 or draw_F0_curve = 0
 
 		if show_more_options = 1
 			comment ("¿Every how many seconds do you want a time mark in the waveform?")
-			positive ("time_mark_without_number at every (seconds)", 0.1)
- 			positive ("time_mark_with_number at every (seconds)", 0.5 )
+			positive ("time_mark_with_number", 0.1)
+ 			positive ("time_mark_without_number", 0.5 )
 		endif
 
 		if draw_F0_curve = 1 and show_more_options = 1
@@ -240,19 +241,31 @@ endif
 
 #################		 SCRIPT BEGGINS		#####################
 
-
-# creates a list of all wavs in the folder
-Create Strings as file list... mywavlist 'sounds_folder$'/*.wav
+# creates list of every file in folder
+myFileList= Create Strings as file list: "mywavlist", sounds_folder$ + "/" + "*"
 numberOfFiles = Get number of strings
-if numberOfFiles = 0
-	exitScript: "There is no wavs in that folder"
-endif 
+
+for stri to numberOfFiles
+	filename$ = Get string: stri
+	if (right$(filename$, 4) <> ".wav") and (right$(filename$, 4) <> ".WAV")
+ 		Remove string: stri
+ 		stri= stri-1
+ 		numberOfFiles= numberOfFiles-1
+ 	endif
+endfor
+
+numberOfFiles = Get number of strings
+if numberOfFiles = 0 
+	exitScript: "There are no .wav or .WAV files in folder" + sounds_folder$
+endif
+
+Erase all
 
 #loop beggins, the following actions will be performed for all wavs in the folder
 for ifile to numberOfFiles
 	#selects the file number x from the object Strings mywavlist
 	select Strings mywavlist
-	fileName$ = Get string... ifile
+	fileName$ = Get string: ifile
     spaces = index (fileName$, " ")
 	
 	if spaces <> 0
@@ -260,9 +273,10 @@ for ifile to numberOfFiles
 	endif
 		
 	base$ = fileName$ - ".wav"
+	base$ = base$ - ".WAV"
 
 	# Reads Sound
-	Read from file... 'sounds_folder$'/'base$'.wav
+	Read from file: sounds_folder$+ "/" + fileName$
 
 	# Creates objet Spectrogram 
 	if draw_spectrogram = 1
@@ -295,11 +309,40 @@ for ifile to numberOfFiles
 		Paint... 0 0 0 0 100 yes dynamic_range 6 0 no
 	endif
 
+	if draw_intensity = 1
+		select Sound 'base$'
+		# Crea la ventana de imagen para la intensidad
+		Viewport... 0 'picture_width' 1 4
+
+		To Intensity: 100, 0, "yes"
+		Line width... 10
+		White
+		Draw: 0, 0, 0, 0, "no"
+
+		Line width... 6
+		Yellow
+		Draw: 0, 0, 0, 0, "no"
+
+				Line width... 1
+
+		if draw_F0_curve=0
+
+			Marks right every: 1, 10, "yes", "yes", "no"
+			Text right: "yes", "Int. (dB)"
+		endif
+	endif
+
+
+
+
+
+
+
 	if draw_F0_curve = 1
 		if range = 1
-			# Crea objeto pitch con unos valores estándar muy grandes para que quepa todo
+			# creates pitch object with default values
 			select Sound 'base$'
-			#elimina todas las frecuencias superiores a 900Hz para minimizar los Pitch de las fricativas que están a 2000 y 3000 Hz
+			#removes fricatives almost-formants between 2000 and 3000 Hz, special for peninsular spanish sibilants
 			soundBand= Filter (stop Hann band): 900, 20000, 100
 			select Sound 'base$'_band
 			pitch_gran_rango= To Pitch (ac)... 0.005 50 15 no 0.03 'voicing_threshold' 'octave_cost' 'octave_jump_cost' 'voiced_unvoiced_cost' 650
@@ -343,10 +386,11 @@ for ifile to numberOfFiles
 		selectObject: myPitch
 		Draw... 0 0 'f0min' 'f0max' no
 
-		# Como una linea negra
+		# Como una linea azul
 		Line width... 6
-		Black
+		Cyan
 		Draw... 0 0 'f0min' 'f0max' no
+		
 	
 		# #Dibuja las s de F0. Eje y
 		Line width... 1
@@ -365,15 +409,15 @@ for ifile to numberOfFiles
 			f0min_redondeado = number (f0min_redondeado$)
 			f0min_redondeado = f0min_redondeado * 10
 			f0max_redondeado = f0max_redondeado * 10
-			One mark left... f0min_redondeado yes no no
-			One mark left... f0max_redondeado yes no no
+			One mark right... f0min_redondeado yes no no
+			One mark right... f0max_redondeado yes no no
 
-			#One mark left... 'f0max' yes no no
-			#One mark left... 'f0min' yes no no
+			#One mark right... 'f0max' yes no no
+			#One mark right... 'f0min' yes no no
 		endif
 		
 		
-		# Determina cada cuánto (50, 100 o 150Hz) tiene que haber marcas según lo grande que sea el range del hablante
+		# Determines pitch marks (each 50, 100 or 150Hz) depending on speakers range
 		speakers_range = f0max - f0min
 
 
@@ -387,7 +431,7 @@ for ifile to numberOfFiles
 
 		numero_de_marcasf0 = (speakers_range/intervalo_entre_marcas)+ 1
 	
-		# Determina cuál será la primera marca que aparezca en el espectrograma según cuál sea el f0 min que se ha indicado
+		# Determines first mark in the spectrogram depending on  f0 min introduced by the user
 		
 		if f0min >= 250
 			marca = 250
@@ -403,20 +447,23 @@ for ifile to numberOfFiles
 			marca = 0
 		endif
 	
-		# Pone las marcas de F0 en Hz según los parámetros anteriores.
+		# writes F0 in Hz according to parameters
 		for i to numero_de_marcasf0
 			marca = marca + intervalo_entre_marcas
 			marca$ = "'marca'"
 			if marca <= f0max
-				do ("One mark left...", 'marca', "yes", "yes", "no", "'marca$'")
+				do ("One mark right...", 'marca', "yes", "yes", "no", "'marca$'")
 			endif
 		endfor
 
 		
-		#Dibuja la caja
+		#draws black box
 		Draw inner box
+
+		Line width... 1
+		Cyan
 		
-		#Determina el texto que aparecerá como título del eje y
+		#Determines  title of x axis
 		if label_of_the_frequency_axis <> 1
 			if label_of_the_frequency_axis = 2
 				label_of_the_frequency_axis$ = "F0 (Hz)"
@@ -438,43 +485,65 @@ for ifile to numberOfFiles
 			elsif label_of_the_frequency_axis = 10
 				label_of_the_frequency_axis$ = "(Hz)"
 			endif
-			#escribe el título del eje y
+			#writes titles y axis
+			Text right... yes 'label_of_the_frequency_axis$'
+		endif
+	endif
+
+
+	if draw_formants = 1
+		
+
+		select Sound 'base$'
+		Viewport... 0 'picture_width' 1 4
+		# creates formant objects
+		To Formant (burg): 0, 5, spectrogram_maximum_frequency, 0.025, 50
+
+		Line width... 10
+		White
+		Speckle: 0, 0, spectrogram_maximum_frequency, 30, "no"
+
+		Line width... 6
+		Red
+		Speckle: 0, 0, spectrogram_maximum_frequency, 30, "no"
+		
+		Line width... 1
+		Black
+		
+		
+
+	endif
+
+
+	#if draw_F0_curve = 0
+	if draw_spectrogram = 1
+			do ("Marks left every...", 1, frequency_marks_every, "yes", "yes", "no")
+		
+			if label_of_the_frequency_axis <> 1	
+				if label_of_the_frequency_axis = 2
+					label_of_the_frequency_axis$ = "Hz"
+				elsif label_of_the_frequency_axis = 3
+					label_of_the_frequency_axis$ = "Frequency (Hz)"
+				elsif label_of_the_frequency_axis = 4
+					label_of_the_frequency_axis$ = "Frecuencia (Hz)"
+				elsif label_of_the_frequency_axis = 5
+					label_of_the_frequency_axis$ = "Freqüència (Hz)"
+				elsif label_of_the_frequency_axis = 6
+					label_of_the_frequency_axis$ = "Frequência (Hz)"
+				elsif label_of_the_frequency_axis = 7
+					label_of_the_frequency_axis$ = "Frequenz (Hz)"
+				elsif label_of_the_frequency_axis = 8
+					label_of_the_frequency_axis$ = "Maiztasuna (Hz)"
+				elsif label_of_the_frequency_axis = 9
+					label_of_the_frequency_axis$ = "Fréquence (Hz)"
+				elsif label_of_the_frequency_axis = 10
+					label_of_the_frequency_axis$ = "(Hz)"
+				endif
+			#escribe el texto del eje y, si no hay curva de f0
 			Text left... yes 'label_of_the_frequency_axis$'
-		endif
-	endif
-
-
-	#si no se va a poner el F0 que salgan las marcas de valor frecuencial del espectrograma
-	if draw_F0_curve = 0
-		do ("Marks left every...", 1, frequency_marks_every, "yes", "yes", "no")
-
-
-	
-		if label_of_the_frequency_axis <> 1	
-			if label_of_the_frequency_axis = 2
-				label_of_the_frequency_axis$ = "Hz"
-			elsif label_of_the_frequency_axis = 3
-				label_of_the_frequency_axis$ = "Frequency (Hz)"
-			elsif label_of_the_frequency_axis = 4
-				label_of_the_frequency_axis$ = "Frecuencia (Hz)"
-			elsif label_of_the_frequency_axis = 5
-				label_of_the_frequency_axis$ = "Freqüència (Hz)"
-			elsif label_of_the_frequency_axis = 6
-				label_of_the_frequency_axis$ = "Frequência (Hz)"
-			elsif label_of_the_frequency_axis = 7
-				label_of_the_frequency_axis$ = "Frequenz (Hz)"
-			elsif label_of_the_frequency_axis = 8
-				label_of_the_frequency_axis$ = "Maiztasuna (Hz)"
-			elsif label_of_the_frequency_axis = 9
-				label_of_the_frequency_axis$ = "Fréquence (Hz)"
-			elsif label_of_the_frequency_axis = 10
-				label_of_the_frequency_axis$ = "(Hz)"
 			endif
-		#escribe el texto del eje y, si no hay curva de f0
-		Text left... yes 'label_of_the_frequency_axis$'
 		endif
 	endif
-
 
 	if draw_waveform=1
 		# Label x axis
@@ -498,29 +567,46 @@ for ifile to numberOfFiles
 			Text top... no 'label_of_the_time_axis$'
 		endif
 
-		#Pone las marcas del eje de tiempo
+		#marks on time
 		Marks top every... 1 'time_mark_without_number' no yes no
 		Marks top every... 1 'time_mark_with_number' yes yes no
 	endif
 	
-
 #######################		DIBUJA EL TEXTGRID		####################################
 	if draw_TextGrid = 1
 		if fileReadable (textGrids_folder$ + "/" + base$ +".TextGrid" )
-			Read from file... 'textGrids_folder$'/'base$'.TextGrid
+			myText = Read from file: textGrids_folder$ +"/"+ base$+".TextGrid"
 			Convert to backslash trigraphs
-		else
-			exitScript: "There is no TextGrid for the Sound " + base$
-		endif
 
-	
-		#Busca cuantos tiers hay en el texgrid
-		numberOfTiers = Get number of tiers
-		# Define el tamaño de la caja para textgrid según el número de tiers que se ha indicado
+			## deals with unicode characters
+			numberOfTiers = Get number of tiers
+
+			# EXTRA % does not work as unicode, so a rough replacement is done
+			if numberOfTiers >= 1
+				for tier to numberOfTiers
+					selectObject: myText
+					isInterval= Is interval tier: tier
+					if isInterval= 1
+						nIntervals = Get number of intervals: tier
+						Replace interval text: tier, 0, nIntervals, "%", "\% ", "Literals"
+						Replace interval text: tier, 0, nIntervals, "\\", "\", "Literals"
+					endif
+					if isInterval=0
+						nPoints = Get number of points: tier
+						Replace point text: tier, 0, nPoints, "%", "\% ", "Literals"
+						Replace point text: tier, 0, nPoints, "\\", "\", "Literals"
+					endif
+				endfor
+			else
+			exitScript: "No tiers in your TextGrid: " + base$
+			endif
+		
+
+		#Defines de size of the box depending on the number of tiers in the textgrid
 		cajatextgrid = (4 + 0.5 * 'numberOfTiers') - 0.02 * 'numberOfTiers'
 		
 
-		# Ventana rosa para los textgrid
+		# selects pink window for the textwrif
 		Viewport... 0 'picture_width' 1 'cajatextgrid'
 		
 
@@ -528,28 +614,39 @@ for ifile to numberOfFiles
 		select TextGrid 'base$'
 		Draw... 0 0 yes yes no
 
-		# Crea ventana para línea exterior
+
+		else
+			pauseScript: "There is no TextGrid for the Sound " + base$
+			cajatextgrid = 4
+
+		endif
+	
+		
+
+		# selects window for box
 		if draw_waveform=1
 			Viewport... 0 'picture_width' 0 'cajatextgrid'
 		else 
 			Viewport... 0 'picture_width' 1 'cajatextgrid'
 		endif
-		# Dibuja la línea exterior
+
+		# draws box
 		Black
 		Draw inner box
 	else
-		#slecciono el viewport desde arriba para en el caso de que no se dibuje el textGrid
-		
-		
+		# If the textgrid is not drawn i select the viewport again with the whole picture 
+
 		if draw_waveform=1
 			Viewport... 0 'picture_width' 0 4
 		else
 			Viewport... 0 'picture_width' 1 4
 		endif
+		
+
 		Black
 		Draw inner box
 	endif
-  #############################		GUARDA LA IMAGEN ##############################
+  #############################		SAVES IMAGE ##############################
   	
 	if picture_Format = 1
 		Save as 300-dpi PNG file: pictures_folder$ + "/" + base$ + ".png"
@@ -564,34 +661,32 @@ for ifile to numberOfFiles
 	endif
 	
 	if picture_Format = 4
-		Write to Windows metafile... 'pictures_folder$'/'base$'.wmf
+		Write to Windows metafile: pictures_folder$+"/"+base$+".wmf"
 	endif
 
 	if picture_Format = 5
-		Write to EPS file... 'pictures_folder$'/'base$'.eps
+		Write to EPS file: pictures_folder$ +"/"+ base$ ".eps"
 	endif
 
 	if picture_Format = 6
-		Write to praat picture file... 'pictures_folder$'/'base$'.praapic
+		Write to praat picture file: pictures_folder$ + "/"+ base$ +".praapic"
 	endif
 	
-	# borra la caja de picture si no dibujaría encima
+	# erases the picture window for the next figure
 	Erase all
 
-	# Limpia objetos
+	# cleaning objects
 	select all
 	minus Strings mywavlist
 	Remove
    	
-	
-	
 endfor
 
 ################################################################
-#	ACCIONES FINALES
+#	AFTER LOOP ACTIONS 
 ################################################################
 
-# Limpieza final
+#  final cleaning
 select Strings mywavlist
 Remove
 numberOfprocessed = ifile-1

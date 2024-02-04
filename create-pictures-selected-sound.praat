@@ -82,15 +82,16 @@
 # 
 #
 ###################################################################################################################################
-# VARIBLES PREDEFINIDAS
+# PREDEFINED VARIBLES
 
 spectrogram_maximum_frequency = 5000
+let_me_modify_my_pitch = 0
 
-#variables para el tiempo cada (ms)
+# time marks each x seconds
     time_mark_with_number = 0.5
     time_mark_without_number = 0.1
 	 
-# variables de puntos susceptibles de ser F0
+# variables to find F0 path 
 	voicing_threshold = 0.45
 	octave_cost = 0.01
 	octave_jump_cost = 0.35
