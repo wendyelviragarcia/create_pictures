@@ -130,16 +130,18 @@ endif
 
 form Create_pictures
     comment Where are your files?
-    sentence Sounds_folder /Users/weg/Desktop/TEST
-    sentence TextGrids_folder /Users/weg/Desktop/TEST
-    sentence Pictures_folder /Users/weg/Desktop/TEST
+    sentence Sounds_folder /Users/weg/Desktop/test
+    sentence TextGrids_folder /Users/weg/Desktop/test
+    sentence Pictures_folder /Users/weg/Desktop/test
 	boolean Draw_waveform yes
 	boolean Draw_spectrogram 1
 	boolean Draw_intensity 1
-	boolean Draw_formants 1
+	boolean Draw_formants 0
 	boolean Draw_TextGrid 1
+	boolean Draw_pulses 1
+
     positive Dynamic_range 45
-    boolean Draw_F0_curve yes
+    boolean Draw_F0_curve no
     optionmenu Range 1
 	option Define range automatically
 	option Define range manually
@@ -204,7 +206,7 @@ if show_more_options = 1 or range = 2 or draw_F0_curve = 0
 
 		if draw_F0_curve = 0 and draw_spectrogram = 1
 			comment ("Spectrogram settings")
-    			positive ("Spectrogram_maximum_frequency", 8000)
+    			positive ("Spectrogram_maximum_frequency", 5000)
 			comment ("¿Every how many Hertzs do you want a frequency mark?")
     			positive ("Frequency_marks_every", 2000)
 			
@@ -276,70 +278,149 @@ for ifile to numberOfFiles
 	base$ = base$ - ".WAV"
 
 	# Reads Sound
-	Read from file: sounds_folder$+ "/" + fileName$
+	mySound = Read from file: sounds_folder$+ "/" + fileName$
 
-	# Creates objet Spectrogram 
-	if draw_spectrogram = 1
-		select Sound 'base$'
-		To Spectrogram... 0.005 'spectrogram_maximum_frequency' 0.002 20 Gaussian
-	endif
-	# Dibuja el oscilograma, espectrograma el pitch, el TextGrid y una caja alrededor de todo ello.
-
+	
 
 	# Fuente de texto y color
 	Times
-	Font size... 14
-	Line width... 1
-	Black
+	Font size: 14
+	Line width: 1
+	
 
-	# Hace la ventana rosa para el oscilograma
-    Viewport... 0 'picture_width' 0 2
 	# Pictures waveform
 	if draw_waveform = 1
-		select Sound 'base$'
-		Draw... 0 0 0 0 no curve
+		# Hace la ventana rosa para el oscilograma
+	    Viewport... 0 'picture_width' 0 2
+		selectObject: mySound
+		Grey
+		Draw: 0, 0, 0, 0, "no", "curve"
+
+		# Label x axis
+		if label_of_the_time_axis <> 1
+			if label_of_the_time_axis = 2
+				label_of_the_time_axis$ = "Tiempo (s)"
+			elsif label_of_the_time_axis = 3
+				label_of_the_time_axis$ = "Temps (s)"
+			elsif label_of_the_time_axis = 4
+				label_of_the_time_axis$ = "Time(s)"
+			elsif label_of_the_time_axis = 5
+				label_of_the_time_axis$ = "Tempo(s)"
+			elsif label_of_the_time_axis = 6
+				label_of_the_time_axis$ = "Zeit (s)"
+			elsif label_of_the_time_axis = 7
+				label_of_the_time_axis$ = "Denbora(s)"
+			elsif label_of_the_time_axis = 8
+				label_of_the_time_axis$ = "(s)"
+			endif
+			#escribe el título del eje x (de tiempo)
+			Text top... no 'label_of_the_time_axis$'
+		endif
+
+		#marks on time
+		Marks top every... 1 'time_mark_without_number' no yes no
+		Marks top every... 1 'time_mark_with_number' yes yes no
+
+
 	endif
- 
-	if draw_spectrogram = 1
-		select Sound 'base$'
-		# Crea la ventana de imagen para el espectrograma
-		Viewport... 0 'picture_width' 1 4
-		# Dibuja el espectrograma
-		select Spectrogram 'base$'
-		Paint... 0 0 0 0 100 yes dynamic_range 6 0 no
-	endif
 
-	if draw_intensity = 1
-		select Sound 'base$'
-		# Crea la ventana de imagen para la intensidad
-		Viewport... 0 'picture_width' 1 4
-
-		To Intensity: 100, 0, "yes"
-		Line width... 10
-		White
-		Draw: 0, 0, 0, 0, "no"
-
-		Line width... 6
-		Yellow
-		Draw: 0, 0, 0, 0, "no"
-
-				Line width... 1
-
-		if draw_F0_curve=0
-
-			Marks right every: 1, 10, "yes", "yes", "no"
-			Text right: "yes", "Int. (dB)"
+	if draw_pulses = 1
+		if draw_waveform = 1
+	 		Viewport... 0 'picture_width' 0 2
+			selectObject: mySound
+			myPoints= To PointProcess (periodic, cc): 75, 600
+			Navy
+			Draw: 0, 0, "no"
+			removeObject: myPoints
+		else
+		 beginPause: "Pause"
+          comment: "You need a waveform to draw pulses,"
+          comment: "I'm not drawing the pulses but I'll do the rest."
+      	 clicked = endPause: "Proceed", 1
 		endif
 	endif
 
 
+ 
+	if draw_spectrogram = 1
+		# Creates objet Spectrogram 
+		selectObject: mySound
+		mySpectrogram = To Spectrogram: 0.005, spectrogram_maximum_frequency, 0.002, 20, "Gaussian"
+
+		# Crea la ventana de imagen para el espectrograma
+		Viewport: 0, picture_width, 1, 4
+		# Dibuja el espectrograma
+		Black
+		selectObject: mySpectrogram
+		Paint: 0, 0, 0, 0, 100, "yes", dynamic_range, 6, 0, "no"
+		Draw inner box
+
+		Marks left every: 1, frequency_marks_every, "yes", "yes", "no"
+
+		if label_of_the_frequency_axis <> 1	
+			if label_of_the_frequency_axis = 2
+				label_of_the_frequency_axis$ = "Hz"
+			elsif label_of_the_frequency_axis = 3
+				label_of_the_frequency_axis$ = "Frequency (Hz)"
+			elsif label_of_the_frequency_axis = 4
+				label_of_the_frequency_axis$ = "Frecuencia (Hz)"
+			elsif label_of_the_frequency_axis = 5
+				label_of_the_frequency_axis$ = "Freqüència (Hz)"
+			elsif label_of_the_frequency_axis = 6
+				label_of_the_frequency_axis$ = "Frequência (Hz)"
+			elsif label_of_the_frequency_axis = 7
+				label_of_the_frequency_axis$ = "Frequenz (Hz)"
+			elsif label_of_the_frequency_axis = 8
+				label_of_the_frequency_axis$ = "Maiztasuna (Hz)"
+			elsif label_of_the_frequency_axis = 9
+				label_of_the_frequency_axis$ = "Fréquence (Hz)"
+			elsif label_of_the_frequency_axis = 10
+				label_of_the_frequency_axis$ = "(Hz)"
+			endif
+		#escribe el texto del eje y, si no hay curva de f0
+		Text left... yes 'label_of_the_frequency_axis$'
+		endif
+
+		removeObject: mySpectrogram
+	endif
 
 
 
 
+	
+
+	if draw_intensity = 1
+		# Crea la ventana de imagen para la intensidad
+		if draw_waveform = 1
+			# if we are drawing the waveform intensity is in the waveform
+			Viewport: 0, picture_width, 0, 2
+		else
+			# if we don't have a vaweform we put the intensity over the spectrogram
+			Viewport: 0, picture_width, 1, 4
+		endif 
+
+		select Sound 'base$'
+		myInt= To Intensity: 100, 0, "no"
+		Line width: 4
+		White
+		Draw: 0, 0, 0, 0, "no"
+		Line width: 4
+		
+		Olive
+		Draw: 0, 0, 0, 0, "no"
+		Line width: 2
+	 
+		if draw_F0_curve = 0 or draw_waveform = 1
+			Marks right every: 1, 10, "yes", "yes", "no"
+			Text right: "yes", "Int. (dB)"
+		endif
+		removeObject: myInt
+	endif
 
 	if draw_F0_curve = 1
 		if range = 1
+			Viewport: 0, picture_width, 1, 4
+
 			# creates pitch object with default values
 			select Sound 'base$'
 			#removes fricatives almost-formants between 2000 and 3000 Hz, special for peninsular spanish sibilants
@@ -370,9 +451,9 @@ for ifile to numberOfFiles
 			soundBand= Filter (stop Hann band): 900, 20000, 100
 			myNonSmoothedPitch = To Pitch (ac)... 0.005 'f0min' 15 no 0.03 'voicing_threshold' 'octave_cost' 'octave_jump_cost' 'voiced_unvoiced_cost' 'f0max'
 			Rename: "nonSmoothedPitch"
-			myPitch= Smooth... smooth
+			myPitch= Smooth: smooth
 			Rename: "myPitch"
-			if let_me_modify_my_pitch=1
+			if let_me_modify_my_pitch = 1
 				pause Select your corrected pitch
 				myPitch = selected ("Pitch")
 			endif
@@ -380,16 +461,16 @@ for ifile to numberOfFiles
 		
 		# Dibuja el pitch
 		# Linea blanca de debajo
-		Line width... 10
+		Line width: 10
 		White
 		Viewport... 0 'picture_width' 1 4
 		selectObject: myPitch
 		Draw... 0 0 'f0min' 'f0max' no
 
 		# Como una linea azul
-		Line width... 6
+		Line width: 6
 		Cyan
-		Draw... 0 0 'f0min' 'f0max' no
+		Draw: 0, 0, f0min, f0max, "no"
 		
 	
 		# #Dibuja las s de F0. Eje y
@@ -458,9 +539,9 @@ for ifile to numberOfFiles
 
 		
 		#draws black box
+		Line width: 1
 		Draw inner box
 
-		Line width... 1
 		Cyan
 		
 		#Determines  title of x axis
@@ -490,90 +571,30 @@ for ifile to numberOfFiles
 		endif
 	endif
 
-
-	if draw_formants = 1
-		
-
+	if draw_formants = 1	
 		select Sound 'base$'
 		Viewport... 0 'picture_width' 1 4
 		# creates formant objects
-		To Formant (burg): 0, 5, spectrogram_maximum_frequency, 0.025, 50
+		myFormants = To Formant (burg): 0, 5, spectrogram_maximum_frequency, 0.025, 50
 
-		Line width... 10
+		Line width: 10
 		White
 		Speckle: 0, 0, spectrogram_maximum_frequency, 30, "no"
-
-		Line width... 6
-		Red
+		Line width: 6
+		Maroon
 		Speckle: 0, 0, spectrogram_maximum_frequency, 30, "no"
-		
-		Line width... 1
-		Black
-		
-		
-
+		removeObject: myFormants
 	endif
 
 
-	#if draw_F0_curve = 0
-	if draw_spectrogram = 1
-			do ("Marks left every...", 1, frequency_marks_every, "yes", "yes", "no")
-		
-			if label_of_the_frequency_axis <> 1	
-				if label_of_the_frequency_axis = 2
-					label_of_the_frequency_axis$ = "Hz"
-				elsif label_of_the_frequency_axis = 3
-					label_of_the_frequency_axis$ = "Frequency (Hz)"
-				elsif label_of_the_frequency_axis = 4
-					label_of_the_frequency_axis$ = "Frecuencia (Hz)"
-				elsif label_of_the_frequency_axis = 5
-					label_of_the_frequency_axis$ = "Freqüència (Hz)"
-				elsif label_of_the_frequency_axis = 6
-					label_of_the_frequency_axis$ = "Frequência (Hz)"
-				elsif label_of_the_frequency_axis = 7
-					label_of_the_frequency_axis$ = "Frequenz (Hz)"
-				elsif label_of_the_frequency_axis = 8
-					label_of_the_frequency_axis$ = "Maiztasuna (Hz)"
-				elsif label_of_the_frequency_axis = 9
-					label_of_the_frequency_axis$ = "Fréquence (Hz)"
-				elsif label_of_the_frequency_axis = 10
-					label_of_the_frequency_axis$ = "(Hz)"
-				endif
-			#escribe el texto del eje y, si no hay curva de f0
-			Text left... yes 'label_of_the_frequency_axis$'
-			endif
-		endif
-	endif
+	
 
-	if draw_waveform=1
-		# Label x axis
-		if label_of_the_time_axis <> 1
-			if label_of_the_time_axis = 2
-				label_of_the_time_axis$ = "Tiempo (s)"
-			elsif label_of_the_time_axis = 3
-				label_of_the_time_axis$ = "Temps (s)"
-			elsif label_of_the_time_axis = 4
-				label_of_the_time_axis$ = "Time(s)"
-			elsif label_of_the_time_axis = 5
-				label_of_the_time_axis$ = "Tempo(s)"
-			elsif label_of_the_time_axis = 6
-				label_of_the_time_axis$ = "Zeit (s)"
-			elsif label_of_the_time_axis = 7
-				label_of_the_time_axis$ = "Denbora(s)"
-			elsif label_of_the_time_axis = 8
-				label_of_the_time_axis$ = "(s)"
-			endif
-			#escribe el título del eje x (de tiempo)
-			Text top... no 'label_of_the_time_axis$'
-		endif
-
-		#marks on time
-		Marks top every... 1 'time_mark_without_number' no yes no
-		Marks top every... 1 'time_mark_with_number' yes yes no
-	endif
+	
 	
 #######################		DIBUJA EL TEXTGRID		####################################
 	if draw_TextGrid = 1
+		Line width: 1
+
 		if fileReadable (textGrids_folder$ + "/" + base$ +".TextGrid" )
 			myText = Read from file: textGrids_folder$ +"/"+ base$+".TextGrid"
 			Convert to backslash trigraphs
@@ -611,6 +632,7 @@ for ifile to numberOfFiles
 		
 
 		# Dibuja el TextGrid
+		Grey
 		select TextGrid 'base$'
 		Draw... 0 0 yes yes no
 
@@ -625,25 +647,26 @@ for ifile to numberOfFiles
 
 		# selects window for box
 		if draw_waveform=1
+			Line width: 1
+			Grey
 			Viewport... 0 'picture_width' 0 'cajatextgrid'
 		else 
+			Grey
 			Viewport... 0 'picture_width' 1 'cajatextgrid'
 		endif
-
-		# draws box
-		Black
 		Draw inner box
+
 	else
 		# If the textgrid is not drawn i select the viewport again with the whole picture 
 
 		if draw_waveform=1
+			Grey
 			Viewport... 0 'picture_width' 0 4
 		else
+			Grey
 			Viewport... 0 'picture_width' 1 4
 		endif
 		
-
-		Black
 		Draw inner box
 	endif
   #############################		SAVES IMAGE ##############################
