@@ -569,6 +569,8 @@ for ifile to numberOfFiles
 			#writes titles y axis
 			Text right... yes 'label_of_the_frequency_axis$'
 		endif
+						removeObject: myNonSmoothedPitch,pitch_gran_rango, myPitch, soundBand
+
 	endif
 
 	if draw_formants = 1	
