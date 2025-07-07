@@ -172,9 +172,16 @@ if show_more_options = 1 or range = 2 or draw_F0_curve = 0
 			sentence ("Manual_range", "50-250")
 		endif
 
-		if draw_spectrogram = 1 and show_more_options = 1 and draw_F0_curve = 1
+		if draw_spectrogram = 1 and show_more_options = 1
 			comment ("Spectrogram settings")
     			positive ("Spectrogram_maximum_frequency", 5000)
+		endif
+
+		if draw_spectrogram = 1 and show_more_options = 1 and draw_F0_curve = 1 and range = 2
+			comment ("Spectrogram settings")
+    			positive ("Spectrogram_maximum_frequency", 5000)
+    		comment ("Introduce manually the range of the speaker.")
+			sentence ("Manual_range", "50-250")
 		endif
 
 		if draw_F0_curve = 0 and draw_spectrogram = 1
@@ -481,7 +488,11 @@ myText = selected("TextGrid")
 			Text right... yes 'label_of_the_frequency_axis$'
 		endif
 
-				removeObject: myNonSmoothedPitch,pitch_gran_rango, myPitch, soundBand
+				removeObject: myPitch, soundBand
+
+				if range=1
+					removeObject: pitch_gran_rango, myNonSmoothedPitch
+				endif
 
 	endif
 
