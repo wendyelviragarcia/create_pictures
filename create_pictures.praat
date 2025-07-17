@@ -432,7 +432,7 @@ for ifile to numberOfFiles
 			q1 = Get quantile... 0 0 0.25 Hertz
 			q3 = Get quantile... 0 0 0.75 Hertz
 			f0min = q1*0.75
-			f0max = q3*1.5			
+			f0max = q3*1.8			
 			select Sound 'base$'_band
 			myNonSmoothedPitch= To Pitch... 0.005 'f0min' 'f0max'
 			Rename: "nonSmoothedPitch"

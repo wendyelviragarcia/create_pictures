@@ -330,6 +330,37 @@ myText = selected("TextGrid")
 	endif
 
 
+	if draw_intensity = 1
+		# Crea la ventana de imagen para la intensidad
+		if draw_waveform = 1
+			# if we are drawing the waveform intensity is in the waveform
+			Viewport: 0, picture_width, 0, 2
+		else
+			# if we don't have a vaweform we put the intensity over the spectrogram
+			Viewport: 0, picture_width, 1, 4
+		endif 
+
+		select Sound 'base$'
+		myInt= To Intensity: 100, 0, "no"
+		Line width: 4
+		White
+		Draw: 0, 0, 0, 0, "no"
+		Line width: 4
+		
+		Yellow
+		Draw: 0, 0, 0, 0, "no"
+		Line width: 2
+	 
+		if draw_F0_curve = 0 or draw_waveform = 1
+			Marks right every: 1, 10, "yes", "yes", "no"
+			Text right: "yes", "Int. (dB)"
+		endif
+		removeObject: myInt
+	endif
+
+
+
+
 	if draw_F0_curve = 1
 		if range = 1
 			Viewport: 0, picture_width, 1, 4
@@ -346,7 +377,7 @@ myText = selected("TextGrid")
 			q1 = Get quantile... 0 0 0.25 Hertz
 			q3 = Get quantile... 0 0 0.75 Hertz
 			f0min = q1*0.75
-			f0max = q3*2.5			
+			f0max = q3*1.8			
 			select Sound 'base$'_band
 			#myNonSmoothedPitch= To Pitch... 0.005 'f0min' 'f0max'
 			myNonSmoothedPitch= To Pitch (filtered autocorrelation): 0, f0min, f0max, 15, "no", 0.03, 0.09, 0.5, 0.055, 0.35, 0.14
@@ -494,6 +525,11 @@ myText = selected("TextGrid")
 					removeObject: pitch_gran_rango, myNonSmoothedPitch
 				endif
 
+
+				if range=2
+					removeObject: myNonSmoothedPitch
+				endif
+
 	endif
 
 
@@ -585,5 +621,5 @@ myText = selected("TextGrid")
 	endif
 	
 	
-	
+	selectObject: mySound, myText
 
