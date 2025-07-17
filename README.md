@@ -6,7 +6,7 @@ This folder contains a three scripts for creating a spectrogram figure (with or 
 - " create-pictures-selected-sound-and-textgrid.praat": Creates a picture for a selected sound and TextGrid, both need to be already open and selected at Praat (with annotation)
 
 > [!WARNING]  
-> I am currently adapting the scripts to the new "To Pitch (filtered)" function, use the latest version of Praat to avoid errors.
+> I am currently adapting the scripts to the new "To Pitch (filtered)" function, use the latest version of Praat to avoid errors. Also be aware that you migh use a pitch ceiling higher than usual if you set that manually.
 
 # Output
 ![image](output.png)

@@ -346,7 +346,7 @@ myText = selected("TextGrid")
 			q1 = Get quantile... 0 0 0.25 Hertz
 			q3 = Get quantile... 0 0 0.75 Hertz
 			f0min = q1*0.75
-			f0max = q3*1.5			
+			f0max = q3*2.5			
 			select Sound 'base$'_band
 			#myNonSmoothedPitch= To Pitch... 0.005 'f0min' 'f0max'
 			myNonSmoothedPitch= To Pitch (filtered autocorrelation): 0, f0min, f0max, 15, "no", 0.03, 0.09, 0.5, 0.055, 0.35, 0.14
@@ -578,7 +578,7 @@ myText = selected("TextGrid")
   	
 
 	if pNG = 1
-		Save as 600-dpi PNG file: pictures_folder$ + "/" + base$ + ".png"
+		Save as 300-dpi PNG file: pictures_folder$ + "/" + base$ + ".png"
 		# borra la caja de picture si no dibujaría encima
 		Erase all
 		echo Picture saved in 'pictures_folder$'
