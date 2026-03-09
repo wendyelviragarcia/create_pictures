@@ -38,12 +38,10 @@
 #		c) Choose what do you want to draw, waveform, spectrogram, and intensity. And whether you want to draw the F0 curve or not. The F0 curve will be written twice, once in white and once in thinner black (Welby 2003).
 #		d) Then specify if you want the F0 range to be defined automatically or manually. If you choose to set it manually, 
 #		in the next window you'll be asked to define the F0 minimum and F0 maximum.
-#		e) Choose if you want the F0 minimum and F0 maximum marks to appear on the y-axis (if you place them, they might overlap with other marks).
 #		Note that the F0 minimum and F0 maximum marks are placed at 'rounded' values, which means that 377.8 Hz is rounded to 380 Hz and 51.2 Hz is rounded to 50 Hz.
 #		f) Decide how much you want the F0 curve to be smoothed. In this field, you need to enter the bandwidth (in Hertz). If you want a 
 #		very smoothed curve, you should choose a smaller bandwidth (e.g. 10), whereas if you want a less smoothed curve you should choose a bigger bandwidth (e.g. 50).
-#		Don't write 0 in here, because your curve would become plain.
-#		g)In the next two choice menus, you can choose the label of the axes (in different languages). You can also decide not to label either or both of them.
+#		Don't write 0 in here, because your curve would become flat.
 #		h) You can change the picture width.
 #		i) Mark the formats in which you want to save the pictures. Notice that PDF will only run if you are working
 #		 on a Mac and wmf is only for Windows. PNG for Windows and presumably Linux.
@@ -51,7 +49,11 @@
 #		Click OK
 #
 #		MORE OPTIONS WINDOW
+#		e) Choose if you want the F0 minimum and F0 maximum marks to appear on the y-axis (if you place them, they might overlap with other marks).
+
 #		If you chose the more options button or if you chose to set the speaker's range manually, a new window will appear. In this window you can:
+#		g)In the next two choice menus, you can choose the label of the axes (in different languages). You can also decide not to label either or both of them.
+
 #		a) Set the F0 range in the picture. You must write the numbers separated by a hyphen. This field will only appear if you chose "Set the range manually" 
 #		in the previous form.
 #  		b) Choose the spectrogram range. This is by default from 0 to 5000Hz.
@@ -76,7 +78,7 @@
 # Feedback is always welcome, please if you notice any bugs or come up with anything that can improve this script, let me know!
 # 	
 # Wendy Elvira-García 
-# wendyelviragarcia@gmail.com // www.wendyelvira.ga
+# wendyelviragarcia@gmail.com // 
 # first version: october 2013
 #
 # Citation: Elvira García, Wendy (2022). Create pictures with tiers v.6. Praat script. (Retrieved from https://github.com/wendyelviragarcia/create_pictures)
@@ -105,7 +107,7 @@
 # FIXED VARIBLES 
 
 spectrogram_maximum_frequency = 5000
-let_me_modify_my_pitch = 0
+#manually_correct_pitch = 0
 frequency_marks_every= 1000
 
 #variables para el tiempo cada (ms)
@@ -117,75 +119,51 @@ frequency_marks_every= 1000
 	octave_cost = 0.01
 	octave_jump_cost = 0.35
 	voiced_unvoiced_cost = 0.14
-	
-if praatVersion < 5366
-	exit Your Praat version ('praatVersion') is too old. Download the new one.
-endif
-	
-if praatVersion < 5373 and macintosh = 1
-	exit Your Praat version ('praatVersion') is too old. Download the new one.
-endif
 
+f0min_f0max_marks=0
+
+label_of_the_time_axis = 1
+label_of_the_frequency_axis = 1
 ############################		FORM		###################################################################
 
-form Create_pictures
-    comment Where are your files?
-    sentence Sounds_folder /Users/weg/Desktop/test
-    sentence TextGrids_folder /Users/weg/Desktop/test
-    sentence Pictures_folder /Users/weg/Desktop/test
-	boolean Draw_waveform yes
-	boolean Draw_spectrogram 1
-	boolean Draw_intensity 1
-	boolean Draw_formants 0
-	boolean Draw_TextGrid 1
-	boolean Draw_pulses 1
+form: "Create pictures"
 
-    positive Dynamic_range 45
-    boolean Draw_F0_curve no
-    optionmenu Range 1
-	option Define range automatically
-	option Define range manually
-    comment Do you want the f0min and f0max values to appear in the y axis?
-    boolean f0min_f0max_marks 0
-    positive Smooth 10
-    
-   
-    optionmenu Label_of_the_time_axis 8
-		option No text
-		option Tiempo (s)
-		option Temps (s)
-		option Time(s)
-		option Tempo (s)
-		option Zeit (s)
-		option Denbora (s)
-		option (s)
-   
-    optionmenu Label_of_the_frequency_axis 2
-		option No text
-		option F0 (Hz)
-		option Frequency (Hz)
-		option Frecuencia (Hz)
-		option Freqüència (Hz)
-		option Frequência (Hz)
-		option Frequenza (Hz)
-		option Frequenz (Hz)
-		option Maiztasuna (Hz)
-		option Fréquence (Hz)
-		option (Hz)
-   
-    positive Picture_width 7
-    
-    comment In which format(s) do you want the picture?
-    optionmenu Picture_Format 1
-	option PNG_300_dpi
-    option PNG_600_dpi
-    option PDF_(for_Mac_and_Linux)
-    option Windows_Media_File_(.wmf_(Windows_only))
-    option EPS
-    option praatPic
-	
-    comment You can change more parametres:
-    boolean Show_more_options 0
+    comment: "Where are your files?"
+
+    sentence: "Sounds_folder", "/Users/weg/Desktop/test"
+    sentence: "TextGrids_folder", "/Users/weg/Desktop/test"
+    sentence: "Pictures_folder", "/Users/weg/Desktop/test"
+
+    boolean: "Draw_waveform", 1
+    boolean: "Draw_spectrogram", 1
+    boolean: "Draw_intensity", 1
+    boolean: "Draw_formants", 0
+    boolean: "Draw_TextGrid", 1
+    boolean: "Draw_pulses", 1
+
+    integer: "Dynamic_range", "45"
+
+    boolean: "Draw_F0_curve", 0
+    boolean: "Manually_correct_pitch", 0
+
+
+    optionmenu: "Range", 1
+        option: "Define range automatically"
+        option: "Define range manually"
+
+    integer: "Smooth", "10"
+    integer: "Picture_width", "7"
+
+    optionmenu: "Picture_Format", 1
+        option: "PNG_300_dpi"
+        option: "PNG_600_dpi"
+        option: "PDF_(for_Mac_and_Linux)"
+        option: "Windows_Media_File_(.wmf_(Windows_only))"
+        option: "EPS"
+        option: "praatPic"
+
+    boolean: "Show_more_options", 0
+
 endform
 
 
@@ -193,40 +171,68 @@ endform
 #################		FORM OPTIONS		###############################
 
 if show_more_options = 1 or range = 2 or draw_F0_curve = 0
-	beginPause ("Options")
+	beginPause: "Options"
+
+	optionmenu: "Label_of_the_time_axis", 8
+		option: "No text"
+		option: "Tiempo (s)"
+		option: "Temps (s)"
+		option: "Time(s)"
+		option: "Tempo (s)"
+		option: "Zeit (s)"
+		option: "Denbora (s)"
+		option: "(s)"
+   
+    optionmenu: "Label_of_the_frequency_axis", 2
+		option: "No text"
+		option: "F0 (Hz)"
+		option: "Frequency (Hz)"
+		option: "Frecuencia (Hz)"
+		option: "Freqüència (Hz)"
+		option: "Frequência (Hz)"
+		option: "Frequenza (Hz)"
+		option: "Frequenz (Hz)"
+		option: "Maiztasuna (Hz)"
+		option: "Fréquence (Hz)"
+		option: "(Hz)"
+
+
+
+
 		if range = 2 and draw_F0_curve = 1
-			comment ("Introduce manually the range of the speaker.")
-			sentence ("Manual_range", "50-250")
+			comment: "Introduce manually the range of the speaker."
+			sentence: "Manual_range", "50-250"
 		endif
 
 		if draw_spectrogram = 1 and show_more_options = 1 and draw_F0_curve = 1
-			comment ("Spectrogram settings")
-    			positive ("Spectrogram_maximum_frequency", 5000)
+			comment: "Spectrogram settings"
+    			positive: "Spectrogram_maximum_frequency", 5000
 		endif
 
 		if draw_F0_curve = 0 and draw_spectrogram = 1
-			comment ("Spectrogram settings")
-    			positive ("Spectrogram_maximum_frequency", 5000)
-			comment ("¿Every how many Hertzs do you want a frequency mark?")
-    			positive ("Frequency_marks_every", 2000)
+			comment: "Spectrogram settings"
+    			positive: "Spectrogram_maximum_frequency", 5000
+			comment: "¿Every how many Hertzs do you want a frequency mark?"
+    			positive: "Frequency_marks_every", 2000
 			
 		endif
 
 		if show_more_options = 1
-			comment ("¿Every how many seconds do you want a time mark in the waveform?")
-			positive ("time_mark_with_number", 0.1)
- 			positive ("time_mark_without_number", 0.5 )
+			comment: "¿Every how many seconds do you want a time mark in the waveform?"
+			positive: "time_mark_with_number", 0.1
+ 			positive: "time_mark_without_number", 0.5 
 		endif
 
 		if draw_F0_curve = 1 and show_more_options = 1
-			comment ("Find the F0 path")
-			positive ("voicing_threshold", 0.45)
-			positive ("octave_cost", 0.01)
-			positive ("octave_jump_cost", 0.35) 
-			positive ("voiced_unvoiced_cost", 0.14)
+			comment: "Find the F0 path"
+			positive: "voicing_threshold", 0.45
+			positive: "octave_cost", 0.01
+			positive: "octave_jump_cost", 0.35
+			positive: "voiced_unvoiced_cost", 0.14
+			boolean: "f0min_f0max_marks", 0
 		endif
    	
-	endPause ("OK", 1)
+	endPause: "OK", 1
 endif
 
 
@@ -314,7 +320,7 @@ for ifile to numberOfFiles
 				label_of_the_time_axis$ = "(s)"
 			endif
 			#escribe el título del eje x (de tiempo)
-			Text top... no 'label_of_the_time_axis$'
+			Text top: "no", label_of_the_time_axis$
 		endif
 
 		#marks on time
@@ -326,7 +332,7 @@ for ifile to numberOfFiles
 
 	if draw_pulses = 1
 		if draw_waveform = 1
-	 		Viewport... 0 'picture_width' 0 2
+	 		Viewport: 0, picture_width, 0, 2
 			selectObject: mySound
 			myPoints= To PointProcess (periodic, cc): 75, 600
 			Navy
@@ -406,7 +412,7 @@ for ifile to numberOfFiles
 		Draw: 0, 0, 0, 0, "no"
 		Line width: 4
 		
-		Olive
+		Yellow
 		Draw: 0, 0, 0, 0, "no"
 		Line width: 2
 	 
@@ -429,19 +435,47 @@ for ifile to numberOfFiles
 			pitch_gran_rango= To Pitch (ac)... 0.005 50 15 no 0.03 'voicing_threshold' 'octave_cost' 'octave_jump_cost' 'voiced_unvoiced_cost' 650
 			Rename: "greatRange"
 			#D. Hirst lines (getting pitch floor and ceiling)
-			q1 = Get quantile... 0 0 0.25 Hertz
-			q3 = Get quantile... 0 0 0.75 Hertz
+			q1 = Get quantile: 0, 0, 0.25, "Hertz"
+			q3 = Get quantile: 0, 0, 0.75, "Hertz"
 			f0min = q1*0.75
 			f0max = q3*1.8			
 			select Sound 'base$'_band
 			myNonSmoothedPitch= To Pitch... 0.005 'f0min' 'f0max'
 			Rename: "nonSmoothedPitch"
-			myPitch= Smooth... smooth
+			myPitch= Smooth: smooth
 			Rename: "myPitch"
-			if let_me_modify_my_pitch=1
-				pause Select your corrected pitch
+
+			unvoice_sounds = 0
+			if manually_correct_pitch = 1
+
+
+				if manually_correct_pitch = 1
+				    beginPause: "Correct Pitch"
+				        comment: "Select your corrected pitch"
+				        comment: "Unvoiced segments can be automatically removed"
+				        boolean: "unvoice_sounds", 1
+				        integer: "sounds_tier", "1"
+				    endPause: "Continue", 1
+				endif
+
 				myPitch = selected ("Pitch")
 				Rename: "myPitch"
+
+				if unvoice_sounds = 1
+					myText = Read from file: textGrids_folder$ +"/"+ base$+".TextGrid"
+    				@UnvoicePitchFromTextGrid: myText, myNonSmoothedPitch, sounds_tier
+
+    				selectObject: myNonSmoothedPitch
+    				myPitch= Smooth: smooth
+					Rename: "myPitch"
+
+    				beginPause: "Correct Pitch2"
+				        comment: "Unvoiced"
+				        comment: "Now select your corrected pitch"
+				    endPause: "Continue", 1
+
+
+				endif
 			endif
 		endif
 
@@ -451,12 +485,41 @@ for ifile to numberOfFiles
 			soundBand= Filter (stop Hann band): 900, 20000, 100
 			myNonSmoothedPitch = To Pitch (ac)... 0.005 'f0min' 15 no 0.03 'voicing_threshold' 'octave_cost' 'octave_jump_cost' 'voiced_unvoiced_cost' 'f0max'
 			Rename: "nonSmoothedPitch"
+
+
 			myPitch= Smooth: smooth
 			Rename: "myPitch"
-			if let_me_modify_my_pitch = 1
-				pause Select your corrected pitch
+			
+			if manually_correct_pitch = 1
+				    beginPause: "Correct Pitch"
+				        comment: "Select your corrected pitch"
+				        comment: "Unvoiced segments can be automatically removed"
+				        boolean: "unvoice_sounds", 1
+				        integer: "sounds_tier", "1"
+				    endPause: "Continue", 1
+				endif
+
 				myPitch = selected ("Pitch")
-			endif
+				Rename: "myPitch"
+
+				if unvoice_sounds = 1
+					myText = Read from file: textGrids_folder$ +"/"+ base$+".TextGrid"
+
+    				@UnvoicePitchFromTextGrid: myText, myNonSmoothedPitch, sounds_tier
+    				selectObject: myNonSmoothedPitch
+
+					
+					myPitch= Smooth: smooth
+					Rename: "myPitch"
+
+    				beginPause: "Correct Pitch2"
+				        comment: "Unvoiced"
+				        comment: "Now select your corrected pitch"
+				    endPause: "Continue", 1
+				endif
+
+
+
 		endif
 		
 		# Dibuja el pitch
@@ -465,7 +528,7 @@ for ifile to numberOfFiles
 		White
 		Viewport... 0 'picture_width' 1 4
 		selectObject: myPitch
-		Draw... 0 0 'f0min' 'f0max' no
+		Draw: 0, 0, f0min, f0max, "no"
 
 		# Como una linea azul
 		Line width: 6
@@ -474,7 +537,7 @@ for ifile to numberOfFiles
 		
 	
 		# #Dibuja las s de F0. Eje y
-		Line width... 1
+		Line width: 1
 
 		# Pone las marcas de f0 máxima y mínima si así se ha indicado en el formulario
 		if f0min_f0max_marks = 1
@@ -718,3 +781,34 @@ numberOfprocessed = ifile-1
 numberOfprocessed$ = fixed$(numberOfprocessed,0)
 writeInfoLine:  numberOfprocessed$ + " pictures have been created."
 appendInfoLine: "The picture files are in " + pictures_folder$
+
+
+
+procedure UnvoicePitchFromTextGrid: tg, pitch, tier
+    selectObject: tg
+    nIntervals = Get number of intervals: tier
+
+    selectObject: pitch
+    View & Edit
+
+    for interval to nIntervals
+    	selectObject: tg
+        label$ = Get label of interval: tier, interval
+
+        #if label$ = "p" or label$ = "t" or label$ = "k" or label$ = "s" or label$ = "f" or label$ = "h" or label$ = "x" or label$ = "ʃ"
+		if index_regex(label$, "(tʃ|tɕ|tʂ|ts|[ptkfsʃʂθçxχħhɸ])") <> 0
+
+            start = Get start time of interval: tier, interval
+            end = Get end time of interval: tier, interval
+
+            selectObject: pitch
+            editor: pitch
+        		Select: start, end
+        		Unvoice
+        	endeditor
+
+        endif
+    endfor
+endproc
+
+
